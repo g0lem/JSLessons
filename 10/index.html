@@ -1,0 +1,173 @@
+
+<!DOCTYPE html> 
+<html>
+    <head>
+        <title>
+            Conway's Game of Life
+        </title>
+    </head>
+    <style>
+        .container {
+            height: 1em;
+        }
+        .liveCell {
+            display: inline-block;
+            text-align: center;
+            width: 1em;
+            height: 1em;
+            border: 1px solid;
+            background-color: green;
+        }
+        .deadCell {
+            display: inline-block;
+            text-align: center;
+            width: 1em;
+            height: 1em;
+            border: 1px solid;
+            background-color: yellow;
+        }
+    </style>
+
+    <body>
+        <div id="game"></div>
+    </body>
+    <script>
+        let a = [
+            [1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [1,1,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,1,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,1,1,1,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        ];
+
+        function renderLiveCell(neighbours = '') {
+            return '<div class="liveCell">'+neighbours+'</div>'
+        }
+
+        function renderDeadCell(neighbours = '') {
+            return '<div class="deadCell">'+neighbours+'</div>'
+        }
+
+        function render(renderString) {
+            document.getElementById('game').innerHTML = renderString;
+        }
+
+        function generateStringFromMatrix(matrix) {
+            let resultingString = '';
+            for(let i=0; i < matrix.length; i++) {
+                let rowString = '';
+                for(let j=0; j < matrix[i].length; j++) {
+                    let neighbours = '';
+                    if(matrix[i][j] === 1) {
+                        rowString = rowString + renderLiveCell(neighbours);
+                    }
+                    else {
+                        rowString = rowString + renderDeadCell(neighbours);
+                    }
+                }
+                resultingString = resultingString + '<div class="container">' + rowString + '</div>';
+            }
+            return resultingString;
+        }
+
+        function areCoordsValid(matrix, i, j) {
+            return i >= 0 && j >=0 && i < matrix.length && j < matrix[0].length;
+        }
+        
+
+        function getCellNeighbours(matrix, i, j) {
+            let neghbours = 0;
+
+            if(areCoordsValid(matrix, i-1, j-1) && matrix[i-1][j-1] === 1) {
+                neghbours++;
+            }
+            if(areCoordsValid(matrix, i, j-1) && matrix[i][j-1] === 1) {
+                neghbours++;
+            }
+
+            if(areCoordsValid(matrix, i-1, j) && matrix[i-1][j] === 1) {
+                neghbours++;
+            }
+
+            if(areCoordsValid(matrix, i+1, j+1) && matrix[i+1][j+1] === 1) {
+                neghbours++;
+            }
+            if(areCoordsValid(matrix, i, j+1) && matrix[i][j+1] === 1) {
+                neghbours++;
+            }
+            if(areCoordsValid(matrix, i+1, j) && matrix[i+1][j] === 1) {
+                neghbours++;
+            }
+
+            if(areCoordsValid(matrix, i+1, j-1) && matrix[i+1][j-1] === 1) {
+                neghbours++;
+            }
+            if(areCoordsValid(matrix, i-1, j+1) && matrix[i-1][j+1] === 1) {
+                neghbours++;
+            }
+
+            return neghbours;
+        }
+
+
+        /*
+            Any live cell with fewer than two live neighbours dies, as if by underpopulation.
+            Any live cell with two or three live neighbours lives on to the next generation.
+            Any live cell with more than three live neighbours dies, as if by overpopulation.
+            Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
+        */
+
+        function updateMatrix(matrix) {
+            for(let i=0; i < matrix.length; i++) {
+                for(let j=0; j < matrix[i].length; j++) {
+                    let neighbours = getCellNeighbours(matrix, i, j);
+                    if(matrix[i][j] === 1) {
+                        if(neighbours < 2) {
+                            matrix[i][j] = 0;
+                        }
+                        if(neighbours === 2 || neighbours === 3) {
+                            matrix[i][j] = 1;
+                        }
+                        if(neighbours > 3) {
+                            matrix[i][j] = 0;
+                        }
+                    } 
+                    else {
+                        if(neighbours === 3) {
+                            matrix[i][j] = 1;
+                        }
+                    }
+                }
+            }
+        }
+
+
+        let matrixString = generateStringFromMatrix(a);
+        render(matrixString)
+        
+        function gameLoop() {
+            updateMatrix(a);
+            let matrixString = generateStringFromMatrix(a);
+            render(matrixString)
+        }
+
+        setInterval(gameLoop, 1000);
+
+        //render('<img src="https://i.seadn.io/gae/2hDpuTi-0AMKvoZJGd-yKWvK4tKdQr_kLIpB_qSeMau2TNGCNidAosMEvrEXFO9G6tmlFlPQplpwiqirgrIPWnCKMvElaYgI-HiVvXc?auto=format&w=1000">')
+
+        function calculateNeighbours() {
+
+        }
+
+    </script>
+</html>
+
+
+

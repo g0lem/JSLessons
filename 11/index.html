@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Hello</title>
+    </head>
+    <body>
+        <h1>test</h1>
+        <div id="testResult"></div>
+        <div id="testResult2"></div>
+    </body>
+    <script>
+        // Declaring variables
+
+        function execMyProgram() {
+            const constant = 'constant string';
+            let letVariable = 'modifiable string';
+            hackyVariable = 'hack initiated';
+            var varVariable = 'test2';
+
+            for(let i=0; i < 10; i++) {
+                let letVariable = 'hello var';
+                //letVariable = 'hello var';
+            }
+
+            doRandomStuff();
+
+            writeToHTML(letVariable);
+        }
+
+
+
+        function doRandomStuff() {
+            hackyVariable = 'test';
+        }
+
+        execMyProgram();
+
+        console.log(hackyVariable)
+
+
+        function writeToHTML(result) {
+            document.getElementById('testResult').innerHTML += result;
+        }
+
+
+        // Declaring Functions
+        function Something() {
+            writeToHTML('Something');
+        }
+
+        const SomethingElse = function() { //anonymous function
+            writeToHTML('Something Else');
+        }
+
+        const SomethingCompletelyDifferent = () => { // (anonymous) arrow function
+            writeToHTML('SomethingCompletelyDifferent');
+        }
+
+
+        SomethingCompletelyDifferent();
+
+
+        // Map
+
+        function writeLineToHTML(result) {
+            document.getElementById('testResult2').innerHTML += '<div>' + result + '</div>';
+        }
+
+        let arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+        // As vrea sa adaug cate un 5 la fiecare dintre valorile array-ului
+        // astfel incat sa am [6, 7, 8, 9, ...]
+
+        const arr2 = arr.map((elm)=>{
+            return elm+5;
+        });
+
+        //this is equivalent to
+
+        const arr3 = arr.map(elm=>elm+5);
+
+        writeLineToHTML(arr3)
+
+        // Daca as vrea sa pun -1 in loc de valorile pare din array
+
+        const arr4 = arr.map(elm=> {
+            if(elm%2 === 0) {
+                return -1;
+            }
+            else {
+                return elm;
+            }
+        })
+
+        // Even shorter
+
+        // const arr5 = arr.map(elm=>elm%2 ? elm : -1);
+
+        writeLineToHTML(arr4);
+
+        // Filter
+
+        //Sterge toate numerele pare din array
+
+        const arr6 = arr.filter((elm)=>elm%2);
+
+        writeLineToHTML(arr6);
+
+        // Reduce
+
+        // Sa se returneze suma valorilor din array
+        const sum = arr.reduce((elm, acc) => acc=acc+elm);
+
+        writeLineToHTML(sum)
+
+        //functiile astea pot fi combinate
+
+        const sum2 = arr.map(elm=>elm+5).reduce((elm, acc) => acc=acc+elm);
+
+        writeLineToHTML(sum2);
+
+        //Todo: show how map and reduce are actually implemented
+        // (with the callback function and stuff)
+
+    </script>
+</html>
