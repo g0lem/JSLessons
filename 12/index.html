@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>My first app</title>
+    </head>
+    <body>
+        <h1>Welcome to my First App!</h1>
+        <div id="myMapDiv"></div>
+        <button onclick="onButtonPress()">Press me</button>
+        <button onclick="onRequestButtonPress()">Do request</button>
+    </body>
+    <script>
+
+        console.log(1);
+        setTimeout(()=>{
+            console.log(2);
+        }, 0);
+        console.log(3);
+
+
+        function onButtonPress() {
+            alert('STOP IT!');
+        }
+
+        function onRequestButtonPress() {
+            fetch('http://localhost:8080/gib').then(
+                async (res) => {
+                    const data = await res.json();
+
+                    writeToDiv(data.text);
+                }
+            )
+        }
+
+        const myMapDivElement = document.getElementById('myMapDiv');
+
+        const OkButton = {
+            text: "Ok",
+            onClick: () => alert('Ok!')
+        }
+
+        const ApplyButton = {
+            text: "Apply",
+            onClick: () => alert('Apply!')
+        }
+
+        const CancelButton = {
+            text: "Cancel",
+            onClick: () => alert('Cancel!')
+        }
+
+        const arrayToBeMapped = [
+            OkButton,
+            ApplyButton,
+            CancelButton,
+        ];
+
+        const writeToDiv = (html) => {
+            myMapDivElement.innerHTML += html;
+        }
+
+        const mappingFunction = (elm) => {
+            const script = () => elm.onClick();
+            const html = '<button onclick="'+ script + '">' + elm.text + '</button>'
+            writeToDiv(html);
+        }
+
+        const myMap = (array, myMappingFunction) => {
+            let resultingArray = [];
+            for(let i=0; i < array.length; i++) {
+                const element = array[i];
+                const transformedElement = myMappingFunction(element);
+                resultingArray.push(transformedElement);
+            }
+            return resultingArray;
+        }
+
+        // arrayToBeMapped.map(mappingFunction);
+
+        // // this is equivalent to:
+
+        // myMap(arrayToBeMapped, mappingFunction)
+
+        function doStuff(callback) {
+            //dostuff
+
+            let data = 'whatevs';
+            //at the end
+
+            callback(data);
+        }
+
+        // doStuff((data)=>alert(data));
+
+
+    </script>
+</html>
